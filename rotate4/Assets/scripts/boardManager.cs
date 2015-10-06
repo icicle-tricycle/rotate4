@@ -4,9 +4,10 @@ using System.Collections;
 public class boardManager : MonoBehaviour {
 
     /// <summary>
+    /// Values of pieces:
     /// 0 = empty, 1 = white, 2 = black
     /// </summary>
-    int[,] board;
+    GameObject[,] board;
     Vector3 origin = new Vector3(-4.75f, 0.25f, 3.15f);
     Vector3 spacing = new Vector3(1.9f, 0f, -1.26f);
 
@@ -15,7 +16,7 @@ public class boardManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        board = new int[6, 6];
+        board = new GameObject[6, 6];
         for (int i = 0; i < 6; i++)
         {
             for (int j = 0; j < 6; j++)
@@ -25,6 +26,7 @@ public class boardManager : MonoBehaviour {
                     origin.x + spacing.x*i,
                     origin.y + spacing.y*0,
                     origin.z + spacing.z*j);
+                board[i, j] = temp;
             }
         }
 
