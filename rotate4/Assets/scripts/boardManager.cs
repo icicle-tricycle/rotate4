@@ -76,6 +76,8 @@ public class boardManager : MonoBehaviour {
 		for (int i = temp.Length; i >=0; i--) {
 			for(int j = temp[i].length; j >= 0; j--){
 
+			for(int j = temp[i-1].length; j >= 0; j--){
+				AddPiece(temp.Length - i, temp[i,j].value);
 			}
 		}
 	}
