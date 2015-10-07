@@ -17,7 +17,7 @@ public class boardManager : MonoBehaviour {
     Vector3 screenSpacing;
     public Camera camera;
 
-    public Piece boardPiece;
+    public piece boardPiece;
 	public int player;
     
 
