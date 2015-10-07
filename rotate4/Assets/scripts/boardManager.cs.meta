@@ -1,10 +1,12 @@
 fileFormatVersion: 2
 guid: 526743642181b2248b17458b42582b45
-timeCreated: 1443902419
-licenseType: Free
+timeCreated: 1444178974
+licenseType: Pro
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - camera: {instanceID: 0}
+  - boardPiece: {fileID: 185156, guid: f3ff13c7a0a04db4797501793ac18107, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
