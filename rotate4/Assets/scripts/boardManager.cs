@@ -50,13 +50,12 @@ public class boardManager : MonoBehaviour {
 
             if (Physics.Raycast(ray, out hit))
             {
-                Debug.Log("Raycasting");
                 if (hit.transform.gameObject.tag == "RowTrigger")
                 {
                     Debug.Log("I have triggered " + hit.transform.name);
+                    AddPiece(hit.transform.gameObject.GetComponent<rowNumber>().rowNum, 1);
                 }
             }
-            Debug.Log("Mouse 1 " + Input.mousePosition);
         }
 	}
 
