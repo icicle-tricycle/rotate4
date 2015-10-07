@@ -7,8 +7,10 @@ public class piece : MonoBehaviour {
     /// Values of pieces:
     /// 0 = empty, 1 = white, 2 = black
     /// </summary>
-    int value;
+    public int value;
 
+    public Material whiteMat;
+    public Material blackMat;
 
 	// Use this for initialization
 	void Start () {
@@ -17,6 +19,22 @@ public class piece : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	    
+        MeshRenderer renderer = GetComponent<MeshRenderer>();
+        if (value == 0)
+        {
+            renderer.enabled = false;
+        }
+        else
+        {
+            renderer.enabled = true;
+            if(value == 1)
+            {
+                renderer.material = whiteMat;
+            }
+            else if (value == 2)
+            {
+                renderer.material = blackMat;
+            }
+        }
 	}
 }
