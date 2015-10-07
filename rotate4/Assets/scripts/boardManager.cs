@@ -8,6 +8,7 @@ public class boardManager : MonoBehaviour {
     /// 0 = empty, 1 = white, 2 = black
     /// </summary>
     piece[,] board;
+    //piece[,] tempBoard;
 
     //public int width = 6;
     //public int height = 6;
@@ -18,7 +19,7 @@ public class boardManager : MonoBehaviour {
     public Camera camera;
 
     public piece boardPiece;
-	public int player;
+	public int playerOne;
     
 
 	// Use this for initialization
@@ -34,6 +35,7 @@ public class boardManager : MonoBehaviour {
                     origin.y + spacing.y*0,
                     origin.z + spacing.z*j);
                 board[i, j] = temp;
+                //tempBoard[i, j] = temp;
             }
         }
         //camera = GetComponent<Camera>();
@@ -53,9 +55,14 @@ public class boardManager : MonoBehaviour {
                 if (hit.transform.gameObject.tag == "RowTrigger")
                 {
                     Debug.Log("I have triggered " + hit.transform.name);
-                    AddPiece(hit.transform.gameObject.GetComponent<rowNumber>().rowNum, player);
+                    AddPiece(hit.transform.gameObject.GetComponent<rowNumber>().rowNum, playerOne);
+                    switchPlayers();
                 }
             }
+        }
+        else if (Input.GetKeyDown(KeyCode.R))
+        {
+            Rotate();
         }
 	}
 
@@ -67,19 +74,65 @@ public class boardManager : MonoBehaviour {
                 break;
 			}
 		}
-		if (i == 0) {
+
+		if (i == 0) 
+        {
 			return;
 		}
 		board[column, i-1].value = player;
 	}
 
 	void Rotate(){
-		piece[,] temp = board;
+        piece[,] temp;
+        temp = copyBoard();
+        resetBoard();
+        
 
-		for (int i = temp.GetLength(0) - 1; i >=0; i--) {
-			for(int j = temp.GetLength(1) - 1; j >= 0; j--){
+		for (int i = temp.GetLength(0) - 1; i >=0; i--) 
+        {
+			for(int j = temp.GetLength(1) - 1; j >= 0; j--)
+            {
+                //Debug.Log("row " + i);
+                //Debug.Log("column " + j);
+                Debug.Log("player " + temp[i, j].value);
 				AddPiece(temp.GetLength(1) - j - 1, temp[i,j].value);
 			}
 		}
 	}
+
+    void switchPlayers()
+    {
+        if (playerOne == 1)
+        {
+            playerOne++;
+            return;
+        }
+        playerOne = 1;
+    }
+
+    void resetBoard()
+    {
+        for (int i = 0; i < board.GetLength(0); i++)
+        {
+            for (int j = 0; j < board.GetLength(1); j++)
+            {
+                board[i, j].value = 0;
+            }
+        }
+    }
+
+    piece[,] copyBoard()
+    {
+        piece[,] temp = new piece[6, 6];
+        for (int i = 0; i < board.GetLength(0); i++)
+        {
+            for (int j = 0; j < board.GetLength(1); j++)
+            {
+                piece tempPiece = new piece();
+                tempPiece.value = board[i,j].value;
+                temp[i, j] = tempPiece;
+            }
+        }
+        return temp;
+    }
 }
