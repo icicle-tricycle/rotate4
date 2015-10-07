@@ -53,7 +53,7 @@ public class boardManager : MonoBehaviour {
                 if (hit.transform.gameObject.tag == "RowTrigger")
                 {
                     Debug.Log("I have triggered " + hit.transform.name);
-                    AddPiece(hit.transform.gameObject.GetComponent<rowNumber>().rowNum, 1);
+                    AddPiece(hit.transform.gameObject.GetComponent<rowNumber>().rowNum, player);
                 }
             }
         }
@@ -66,6 +66,9 @@ public class boardManager : MonoBehaviour {
 			if(board[column, i].value != 0){
                 break;
 			}
+		}
+		if (i == 0) {
+			return;
 		}
 		board[column, i-1].value = player;
 	}
