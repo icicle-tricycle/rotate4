@@ -74,12 +74,9 @@ public class boardManager : MonoBehaviour {
 	void Rotate(){
 		piece[,] temp = board;
 
-		for (int i = temp.GetLength(0); i >=0; i--) {
-            for (int j = temp.GetLength(1); j >= 0; j--)
-            {
-
-			for(int j = temp[i-1].length; j >= 0; j--){
-				AddPiece(temp.Length - i, temp[i,j].value);
+		for (int i = temp.GetLength(0) - 1; i >=0; i--) {
+			for(int j = temp.GetLength(1) - 1; j >= 0; j--){
+				AddPiece(temp.GetLength(1) - j - 1, temp[i,j].value);
 			}
 		}
 	}
