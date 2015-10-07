@@ -12,6 +12,7 @@ public class boardManager : MonoBehaviour {
     Vector3 spacing = new Vector3(1.9f, 0f, -1.26f);
 
     public GameObject boardPiece;
+	public int player;
     
 
 	// Use this for initialization
@@ -38,7 +39,25 @@ public class boardManager : MonoBehaviour {
 	
 	}
 
-	void AddPiece(){
+	void AddPiece(int column, int player){
+		int spot;
 
+		for (int i = 0; i < board.length; i++) {
+			if(board[column, i].value == 0){
+				spot = i;
+			}
+		}
+
+		board[column, spot].value = player;
+	}
+
+	void Rotate(){
+		GameObject[,] temp = board;
+
+		for (int i = temp.Length; i >=0; i--) {
+			for(int j = temp[i].length; j >= 0; j--){
+
+			}
+		}
 	}
 }
