@@ -62,8 +62,12 @@ public class boardManager : MonoBehaviour {
         }
         else if (Input.GetKeyDown(KeyCode.R))
         {
-            Rotate();
+			Rotate (true);
         }
+		else if (Input.GetKeyDown(KeyCode.T))
+		{
+			Rotate (false);
+		}
 	}
 
 	void AddPiece(int column, int player){
@@ -82,20 +86,29 @@ public class boardManager : MonoBehaviour {
 		board[column, i-1].value = player;
 	}
 
-	void Rotate(){
+	void Rotate(bool clockwise){
         piece[,] temp;
         temp = copyBoard();
         resetBoard();
         
-
-		for (int i = temp.GetLength(0) - 1; i >=0; i--) 
-        {
-			for(int j = temp.GetLength(1) - 1; j >= 0; j--)
-            {
-                //Debug.Log("row " + i);
-                //Debug.Log("column " + j);
-                Debug.Log("player " + temp[i, j].value);
-				AddPiece(temp.GetLength(1) - j - 1, temp[i,j].value);
+		if (clockwise) {
+			for (int i = temp.GetLength(0) - 1; i >=0; i--) {
+				for (int j = temp.GetLength(1) - 1; j >= 0; j--) {
+					//Debug.Log("row " + i);
+					//Debug.Log("column " + j);
+					Debug.Log ("player " + temp [i, j].value);
+					AddPiece (temp.GetLength (1) - j - 1, temp [i, j].value);
+				}
+			}
+		}
+		else {
+			for (int i = 0; i < temp.GetLength(0); i++) {
+				for (int j = temp.GetLength(1) - 1; j >= 0; j--) {
+					//Debug.Log("row " + i);
+					//Debug.Log("column " + j);
+					Debug.Log ("player " + temp [i, j].value);
+					AddPiece (j, temp [i, j].value);
+				}
 			}
 		}
 	}
