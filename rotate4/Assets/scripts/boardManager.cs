@@ -84,6 +84,22 @@ public class boardManager : MonoBehaviour {
 			return;
 		}
 		board[column, i-1].value = player;
+
+        int numWins = 0;
+
+        numWins += checkWin(player, 0, column, i - 1, new Vector2(1, -1));
+        numWins += checkWin(player, 0, column, i - 1, new Vector2(1, 0));
+        numWins += checkWin(player, 0, column, i - 1, new Vector2(1, 1));
+        numWins += checkWin(player, 0, column, i - 1, new Vector2(0, -1));
+        numWins += checkWin(player, 0, column, i - 1, new Vector2(0, 1));
+        numWins += checkWin(player, 0, column, i - 1, new Vector2(-1, -1));
+        numWins += checkWin(player, 0, column, i - 1, new Vector2(-1, 0));
+        numWins += checkWin(player, 0, column, i - 1, new Vector2(-1, 1));
+
+        if (numWins > 0)
+        {
+            Debug.Log(player + " wins");
+        }
 	}
 
 	void Rotate(bool clockwise){
@@ -147,5 +163,29 @@ public class boardManager : MonoBehaviour {
             }
         }
         return temp;
+    }
+
+    int checkWin(int winValue, int winStreak, int row, int col, Vector2 direction)
+    {
+        //Debug.Log(winStreak);
+        if (winStreak == 4)
+        {
+            return 1;
+        }
+        else if (row < 0 || row >= board.GetLength(0) || col < 0 || col >= board.GetLength(1))
+        {
+            return 0;
+        }
+
+        if (!board[row,col].visited && winValue == board[row, col].value)
+        {
+            board[row, col].visited = true;
+            int returnValue = checkWin(winValue, winStreak+1, row + (int)direction.x, col + (int)direction.y, direction);
+            board[row, col].visited = false;
+
+            return returnValue;
+        }
+
+        return 0;
     }
 }

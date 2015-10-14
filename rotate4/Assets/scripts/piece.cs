@@ -8,6 +8,7 @@ public class piece : MonoBehaviour {
     /// 0 = empty, 1 = white, 2 = black
     /// </summary>
     public int value;
+    public bool visited;
 
     public Material whiteMat;
     public Material blackMat;
