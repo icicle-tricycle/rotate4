@@ -12,8 +12,8 @@ public class boardManager : MonoBehaviour {
 
     //public int width = 6;
     //public int height = 6;
-    Vector3 origin = new Vector3(-4.75f, 0.25f, 3.15f);
-    Vector3 spacing = new Vector3(1.9f, 0f, -1.26f);
+    Vector3 origin = new Vector3(-7.95f, 0.25f, 4.25f);
+    Vector3 spacing = new Vector3(1.70f, 0f, -1.70f);
     Vector3 boardOrigin;
     Vector3 screenSpacing;
     public Camera camera;
