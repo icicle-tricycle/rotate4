@@ -55,8 +55,11 @@ public class boardManager : MonoBehaviour {
                 if (hit.transform.gameObject.tag == "RowTrigger")
                 {
                     Debug.Log("I have triggered " + hit.transform.name);
-                    AddPiece(hit.transform.gameObject.GetComponent<rowNumber>().rowNum, playerOne);
-                    switchPlayers();
+					if(board[hit.transform.gameObject.GetComponent<rowNumber>().rowNum, 0].value == 0){
+						Debug.Log ("Made a piece");
+                    	AddPiece(hit.transform.gameObject.GetComponent<rowNumber>().rowNum, playerOne);
+                   	 	switchPlayers();
+					}
                 }
             }
         }
