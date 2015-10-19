@@ -1,12 +1,14 @@
 fileFormatVersion: 2
 guid: 526743642181b2248b17458b42582b45
-timeCreated: 1444178974
-licenseType: Pro
+timeCreated: 1445220003
+licenseType: Free
 MonoImporter:
   serializedVersion: 2
   defaultReferences:
   - camera: {instanceID: 0}
-  - boardPiece: {fileID: 185156, guid: f3ff13c7a0a04db4797501793ac18107, type: 2}
+  - boardPiece: {instanceID: 0}
+  - whiteCanvas: {fileID: 122322, guid: 76338da0955a47d4db528e875d0658e7, type: 2}
+  - blackCanvas: {fileID: 199404, guid: 812f518479887834daafe0a84769c279, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
