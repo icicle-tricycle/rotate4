@@ -20,7 +20,9 @@ public class boardManager : MonoBehaviour {
 
     public piece boardPiece;
 	public int playerOne;
-    
+
+   // public Canvas whiteCanvas;
+    //public Canvas blackCanvas;    
 
 	// Use this for initialization
 	void Start () {
@@ -133,9 +135,17 @@ public class boardManager : MonoBehaviour {
     {
         if (playerOne == 1)
         {
+            //blackCanvas.GetComponent<Canvas>().enabled = false;
+            //whiteCanvas.GetComponent<Canvas>().enabled = true;
+            //blackCanvas.SetActive(true);
+            //whiteCanvas.SetActive(false);
             playerOne++;
             return;
         }
+        //blackCanvas.GetComponent<Canvas>().enabled = false;
+        //whiteCanvas.GetComponent<Canvas>().enabled = true;
+        //blackCanvas.SetActive(false);
+        //whiteCanvas.SetActive(true);
         playerOne = 1;
     }
 
