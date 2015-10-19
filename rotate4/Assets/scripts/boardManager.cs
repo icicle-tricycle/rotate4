@@ -20,10 +20,18 @@ public class boardManager : MonoBehaviour {
 
     public piece boardPiece;
 	public int playerOne;
-    
+
+    //public GameObject whiteCanvas;
+    //public GameObject blackCanvas; 
+    private GameObject whiteCanvas;
+    private GameObject blackCanvas; 
 
 	// Use this for initialization
 	void Start () {
+
+        whiteCanvas = GameObject.Find("CanvasWhite");
+        blackCanvas = GameObject.Find("CanvasBlack");
+
         board = new piece[6, 6];
         for (int i = 0; i < 6; i++)
         {
@@ -136,9 +144,13 @@ public class boardManager : MonoBehaviour {
     {
         if (playerOne == 1)
         {
+            whiteCanvas.GetComponent<CanvasGroup>().alpha = 0.0f;
+            blackCanvas.GetComponent<CanvasGroup>().alpha = 1.0f;
             playerOne++;
             return;
         }
+        whiteCanvas.GetComponent<CanvasGroup>().alpha = 1.0f;
+        blackCanvas.GetComponent<CanvasGroup>().alpha = 0.0f;
         playerOne = 1;
     }
 
