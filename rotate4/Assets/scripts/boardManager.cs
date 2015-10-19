@@ -24,8 +24,8 @@ public class boardManager : MonoBehaviour {
     //public GameObject whiteCanvas;
     //public GameObject blackCanvas; 
     private GameObject whiteCanvas;
-    private GameObject blackCanvas; 
-
+    private GameObject blackCanvas;
+    
 	// Use this for initialization
 	void Start () {
 
@@ -74,10 +74,12 @@ public class boardManager : MonoBehaviour {
         else if (Input.GetKeyDown(KeyCode.R))
         {
 			Rotate (true);
+            switchPlayers();
         }
 		else if (Input.GetKeyDown(KeyCode.T))
 		{
 			Rotate (false);
+            switchPlayers();
 		}
 	}
 
@@ -113,7 +115,7 @@ public class boardManager : MonoBehaviour {
         }
 	}
 
-	void Rotate(bool clockwise){
+	public void Rotate(bool clockwise){
         piece[,] temp;
         temp = copyBoard();
         resetBoard();
@@ -140,7 +142,7 @@ public class boardManager : MonoBehaviour {
 		}
 	}
 
-    void switchPlayers()
+    public void switchPlayers()
     {
         if (playerOne == 1)
         {
