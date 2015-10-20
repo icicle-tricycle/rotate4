@@ -83,6 +83,9 @@ public class boardManager : MonoBehaviour {
 		}
 	}
 
+
+	//Receive column and the player value
+	//Go to column and look at 
 	void AddPiece(int column, int player){
 		int i;
 
@@ -115,11 +118,15 @@ public class boardManager : MonoBehaviour {
         }
 	}
 
+	//Rotate the board clockwise or counter-clockwise
 	public void Rotate(bool clockwise){
         piece[,] temp;
         temp = copyBoard();
         resetBoard();
         
+		//Start at lower right corner
+		//take piece and add it to corresponding row
+		//move up the column, and distribute them across
 		if (clockwise) {
 			for (int i = temp.GetLength(0) - 1; i >=0; i--) {
 				for (int j = temp.GetLength(1) - 1; j >= 0; j--) {
@@ -130,6 +137,9 @@ public class boardManager : MonoBehaviour {
 				}
 			}
 		}
+		//Start at lower left corner
+		//take piece and add it to corresponding row
+		//move up the column, and distribute them across
 		else {
 			for (int i = 0; i < temp.GetLength(0); i++) {
 				for (int j = temp.GetLength(1) - 1; j >= 0; j--) {
