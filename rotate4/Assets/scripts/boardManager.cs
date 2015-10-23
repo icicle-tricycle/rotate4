@@ -25,12 +25,14 @@ public class boardManager : MonoBehaviour {
     //public GameObject blackCanvas; 
     private GameObject whiteCanvas;
     private GameObject blackCanvas;
+	private GameObject grid;
     
 	// Use this for initialization
 	void Start () {
 
         whiteCanvas = GameObject.Find("CanvasWhite");
         blackCanvas = GameObject.Find("CanvasBlack");
+		grid = GameObject.Find ("Board");
 
         board = new piece[6, 6];
         for (int i = 0; i < 6; i++)
@@ -136,6 +138,7 @@ public class boardManager : MonoBehaviour {
 					AddPiece (temp.GetLength (1) - j - 1, temp [i, j].value);
 				}
 			}
+			//grid.transform.rotation = Quaternion.Slerp(new Quaternion(0.0f, 0.0f, 0.0f, 0.0f), new Quaternion(90.0f, 0.0f, 0.0f, 0.0f), 5.0f);
 		}
 		//Start at lower left corner
 		//take piece and add it to corresponding row
