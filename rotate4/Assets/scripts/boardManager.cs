@@ -19,7 +19,16 @@ public class boardManager : MonoBehaviour {
     public Camera camera;
 
     public piece boardPiece;
+	/// <summary>
+	/// Var for if it is player one's turn
+	/// </summary>
 	public int playerOne;
+
+	public enum GameState
+	{
+		playerInput, animation, end
+	}
+	public GameState gameState;
 
     //public GameObject whiteCanvas;
     //public GameObject blackCanvas; 
@@ -55,34 +64,53 @@ public class boardManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetButtonDown("Fire1"))// && IsOnBoard())
-        {
-            RaycastHit hit;
-            Ray ray = camera.ScreenPointToRay(Input.mousePosition);
-
-            if (Physics.Raycast(ray, out hit))
-            {
-                if (hit.transform.gameObject.tag == "RowTrigger")
-                {
-                    Debug.Log("I have triggered " + hit.transform.name);
-					if(board[hit.transform.gameObject.GetComponent<rowNumber>().rowNum, 0].value == 0){
-						Debug.Log ("Made a piece");
-                    	AddPiece(hit.transform.gameObject.GetComponent<rowNumber>().rowNum, playerOne);
-                   	 	switchPlayers();
-					}
-                }
-            }
-        }
-        else if (Input.GetKeyDown(KeyCode.R))
-        {
-			Rotate (true);
-            switchPlayers();
-        }
-		else if (Input.GetKeyDown(KeyCode.T))
+		switch (gameState) {
+		case GameState.playerInput:
 		{
-			Rotate (false);
-            switchPlayers();
+			if (Input.GetButtonDown("Fire1"))// && IsOnBoard())
+			{
+				RaycastHit hit;
+				Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+				
+				if (Physics.Raycast(ray, out hit))
+				{
+					if (hit.transform.gameObject.tag == "RowTrigger")
+					{
+						Debug.Log("I have triggered " + hit.transform.name);
+						if(board[hit.transform.gameObject.GetComponent<rowNumber>().rowNum, 0].value == 0){
+							Debug.Log ("Made a piece");
+							AddPiece(hit.transform.gameObject.GetComponent<rowNumber>().rowNum, playerOne);
+							switchPlayers();
+						}
+					}
+				}
+			}
+			else if (Input.GetKeyDown(KeyCode.R))
+			{
+				Rotate (true);
+				switchPlayers();
+			}
+			else if (Input.GetKeyDown(KeyCode.T))
+			{
+				Rotate (false);
+				switchPlayers();
+			}
+			break;
 		}
+		case GameState.animation:
+		{
+
+			break;
+		}
+		case GameState.end:
+		{
+
+			break;
+		}
+		default:
+			break;
+		}
+        
 	}
 
 
