@@ -17,6 +17,9 @@ public class piece : MonoBehaviour {
 	void Start () {
         value = 0;
 	}
+
+    public Vector2 targetPos;
+    public Vector2 animationPos;
 	
 	// Update is called once per frame
 	void Update () {
@@ -38,4 +41,16 @@ public class piece : MonoBehaviour {
             }
         }
 	}
+
+    public void moveAnimation()
+    {
+        return;
+        if(true)
+        {
+            Vector2 dPos = new Vector2(targetPos.x - transform.position.x, targetPos.y - transform.position.z);
+            dPos *= .5f;
+            transform.position += new Vector3(dPos.x, 0, dPos.y);
+        }
+
+    }
 }
