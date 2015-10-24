@@ -17,8 +17,11 @@ public class rotationButton : MonoBehaviour {
 
     public void onClick()
     {
-        Debug.Log("clicked");
-        bm.GetComponent<boardManager>().Rotate(rotDir);
-        bm.GetComponent<boardManager>().switchPlayers();
+        //Debug.Log("clicked");
+        if (bm.GetComponent<boardManager>().gameState == boardManager.GameState.playerInput)
+        {
+            bm.GetComponent<boardManager>().Rotate(rotDir);
+            bm.GetComponent<boardManager>().switchPlayers();
+        }
     }
 }
