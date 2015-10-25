@@ -49,6 +49,7 @@ public class boardManager : MonoBehaviour {
             for (int j = 0; j < 6; j++)
             {
                 piece temp = Instantiate(boardPiece);
+                temp.transform.parent = boardQuad.transform;
                 temp.transform.position = new Vector3(
                     origin.x + spacing.x*i,
                     origin.y + spacing.y*0,
@@ -99,7 +100,7 @@ public class boardManager : MonoBehaviour {
 		}
 		case GameState.animation:
 		{
-            if (boardQuad.GetComponent<boardRotate>().rotationInterval == 0)
+            if (boardQuad.GetComponent<boardRotate>().RotationInterval == 0)
             {
                 gameState = GameState.playerInput;
             }
@@ -171,19 +172,21 @@ public class boardManager : MonoBehaviour {
 
         piece[,] temp;
         temp = copyBoard();
-        resetBoard();
+        //UNCOMMENT AFTER PLANNING ANIMATED ROTATION
+        //resetBoard();
         
 		//Start at lower right corner
 		//take piece and add it to corresponding row
 		//move up the column, and distribute them across
 		if (clockwise) {
-            boardQuad.GetComponent<boardRotate>().rotationInterval = -.4f;
+            boardQuad.GetComponent<boardRotate>().RotationInterval = -3.0f;
 			for (int i = temp.GetLength(0) - 1; i >=0; i--) {
 				for (int j = temp.GetLength(1) - 1; j >= 0; j--) {
 					//Debug.Log("row " + i);
 					//Debug.Log("column " + j);
 					//Debug.Log ("player " + temp [i, j].value);
-					AddPiece (temp.GetLength (1) - j - 1, temp [i, j].value);
+                    //UNCOMMENT AFTER PLANNING ANIMATED ROTATION
+                    //AddPiece (temp.GetLength (1) - j - 1, temp [i, j].value);
 				}
 			}
 			//grid.transform.rotation = Quaternion.Slerp(new Quaternion(0.0f, 0.0f, 0.0f, 0.0f), new Quaternion(90.0f, 0.0f, 0.0f, 0.0f), 5.0f);
@@ -192,13 +195,14 @@ public class boardManager : MonoBehaviour {
 		//take piece and add it to corresponding row
 		//move up the column, and distribute them across
 		else {
-            boardQuad.GetComponent<boardRotate>().rotationInterval = .4f;
+            boardQuad.GetComponent<boardRotate>().RotationInterval = 3.0f;
 			for (int i = 0; i < temp.GetLength(0); i++) {
 				for (int j = temp.GetLength(1) - 1; j >= 0; j--) {
 					//Debug.Log("row " + i);
 					//Debug.Log("column " + j);
 					//Debug.Log ("player " + temp [i, j].value);
-					AddPiece (j, temp [i, j].value);
+                    //UNCOMMENT AFTER PLANNING ANIMATED ROTATION
+                    //AddPiece (j, temp [i, j].value);
 				}
 			}
 		}

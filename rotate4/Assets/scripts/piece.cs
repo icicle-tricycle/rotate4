@@ -44,11 +44,12 @@ public class piece : MonoBehaviour {
 
     public void moveAnimation()
     {
+        //not usable yet
         return;
         if(true)
         {
             Vector2 dPos = new Vector2(targetPos.x - transform.position.x, targetPos.y - transform.position.z);
-            dPos *= .5f;
+            dPos *= .05f;
             transform.position += new Vector3(dPos.x, 0, dPos.y);
         }
 
