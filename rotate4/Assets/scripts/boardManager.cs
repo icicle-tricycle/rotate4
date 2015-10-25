@@ -23,6 +23,8 @@ public class boardManager : MonoBehaviour {
 	/// </summary>
 	public int playerOne;
 
+	public int boardState;
+
 	public enum GameState
 	{
 		playerInput, animation, end
@@ -42,6 +44,7 @@ public class boardManager : MonoBehaviour {
         blackCanvas = GameObject.Find("CanvasBlack");
         boardQuad = GameObject.Find("Board");
         gameState = GameState.playerInput;
+		boardState = 0;
 
         board = new piece[6, 6];
         for (int i = 0; i < 6; i++)
@@ -61,6 +64,7 @@ public class boardManager : MonoBehaviour {
         //camera = GetComponent<Camera>();
         boardOrigin = camera.WorldToScreenPoint(origin);
         screenSpacing = camera.WorldToScreenPoint(spacing);
+		UpdateBelow();
 	}
 	
 	// Update is called once per frame
@@ -68,6 +72,8 @@ public class boardManager : MonoBehaviour {
 		switch (gameState) {
 		case GameState.playerInput:
 		{
+			UpdateBelow();
+			Fall ();
 			if (Input.GetButtonDown("Fire1"))// && IsOnBoard())
 			{
 				RaycastHit hit;
@@ -140,7 +146,24 @@ public class boardManager : MonoBehaviour {
         {
 			return;
         }
-        board[column, i - 1].value = player;
+		switch(boardState){
+		case 0:
+			board[column, i - 1].value = player;
+			break;
+		case 1:
+			board[column, i - 1].value = player;
+			break;
+		case 2:
+			board[column, i - 1].value = player;
+			break;
+		case 3:
+			//board[board.GetLength (0) - i, column].value = player;
+			board[column, i - 1].value = player;
+			break;
+
+		default:
+			break;
+		}
         board[column, i - 1].animationPos = new Vector3(
                     origin.x + spacing.x * i,
                     origin.z + spacing.z * column);
@@ -179,34 +202,38 @@ public class boardManager : MonoBehaviour {
 		//take piece and add it to corresponding row
 		//move up the column, and distribute them across
 		if (clockwise) {
-            boardQuad.GetComponent<boardRotate>().RotationInterval = -3.0f;
+            //boardQuad.GetComponent<boardRotate>().RotationInterval = -3.0f;
 			for (int i = temp.GetLength(0) - 1; i >=0; i--) {
 				for (int j = temp.GetLength(1) - 1; j >= 0; j--) {
 					//Debug.Log("row " + i);
 					//Debug.Log("column " + j);
 					//Debug.Log ("player " + temp [i, j].value);
                     //UNCOMMENT AFTER PLANNING ANIMATED ROTATION
-                    //AddPiece (temp.GetLength (1) - j - 1, temp [i, j].value);
+					board[temp.GetLength (1) - j - 1, i].value = temp [i, j].value;
 				}
 			}
-			//grid.transform.rotation = Quaternion.Slerp(new Quaternion(0.0f, 0.0f, 0.0f, 0.0f), new Quaternion(90.0f, 0.0f, 0.0f, 0.0f), 5.0f);
+			boardState++;
+			if(boardState > 3)
+				boardState = 0;
 		}
 		//Start at lower left corner
 		//take piece and add it to corresponding row
 		//move up the column, and distribute them across
 		else {
-            boardQuad.GetComponent<boardRotate>().RotationInterval = 3.0f;
+            //boardQuad.GetComponent<boardRotate>().RotationInterval = 3.0f;
 			for (int i = 0; i < temp.GetLength(0); i++) {
 				for (int j = temp.GetLength(1) - 1; j >= 0; j--) {
 					//Debug.Log("row " + i);
 					//Debug.Log("column " + j);
 					//Debug.Log ("player " + temp [i, j].value);
                     //UNCOMMENT AFTER PLANNING ANIMATED ROTATION
-                    //AddPiece (j, temp [i, j].value);
+					board[j, i].value = temp [i, j].value;
 				}
 			}
+			boardState--;
+			if(boardState < 0)
+				boardState = 3;
 		}
-
         
     }
     /// <summary>
@@ -288,4 +315,28 @@ public class boardManager : MonoBehaviour {
 
         return 0;
     }
+	//Resets the the piece that is below each piece
+	void UpdateBelow()
+	{
+		for (int i = 0; i < board.GetLength(0); i++) {
+			for (int j = 0; j < board.GetLength(1); j++){
+				if(j < board.GetLength(1) - 1)
+					board[i, j].SetBelow(board[i, j + 1]);
+				else
+					board[i, j].SetBelow(null);
+			}
+		}
+	}
+	//Causes pieces to fall, by setting the piece below to value and setting original to 0
+	void Fall()
+	{
+		for (int i = board.GetLength(0) - 1; i >=0; i--) {
+			for (int j = board.GetLength(1) - 1; j >= 0; j--) {
+				if (board [i, j].GetBelow != null && board [i, j].GetBelow.value == 0) {
+					board[i, j].GetBelow.value = board[i, j].value;
+					board[i, j].value = 0;
+				}
+			}
+		}
+	}
 }

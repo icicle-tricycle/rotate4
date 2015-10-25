@@ -13,13 +13,15 @@ public class piece : MonoBehaviour {
     public Material whiteMat;
     public Material blackMat;
 
+	public Vector2 targetPos;
+	public Vector2 animationPos;
+	private piece below;
+
 	// Use this for initialization
 	void Start () {
         value = 0;
-	}
-
-    public Vector2 targetPos;
-    public Vector2 animationPos;
+		below = null;
+	}   
 	
 	// Update is called once per frame
 	void Update () {
@@ -42,6 +44,14 @@ public class piece : MonoBehaviour {
         }
 	}
 
+	public piece GetBelow
+	{
+		get {return below;}
+	}
+	public void SetBelow(piece value) {
+		below = value;
+	}
+
     public void moveAnimation()
     {
         //not usable yet
@@ -54,4 +64,5 @@ public class piece : MonoBehaviour {
         }
 
     }
+	
 }
