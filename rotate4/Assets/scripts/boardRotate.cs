@@ -3,7 +3,6 @@ using System.Collections;
 
 public class boardRotate : MonoBehaviour {
 
-
     private float rotationInterval;
     public float RotationInterval
     {
