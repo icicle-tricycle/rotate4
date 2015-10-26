@@ -64,114 +64,151 @@ public class boardManager : MonoBehaviour {
         //camera = GetComponent<Camera>();
         boardOrigin = camera.WorldToScreenPoint(origin);
         screenSpacing = camera.WorldToScreenPoint(spacing);
-		UpdateBelow();
+		UpdatePieceLinks();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		switch (gameState) {
-		case GameState.playerInput:
-		{
-			UpdateBelow();
-			Fall ();
-			if (Input.GetButtonDown("Fire1"))// && IsOnBoard())
-			{
-				RaycastHit hit;
-				Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+		switch (gameState) 
+        {
+		    case GameState.playerInput:
+			    UpdatePieceLinks();
+			    Fall ();
+                //printBoard();
+			    if (Input.GetButtonDown("Fire1"))// && IsOnBoard())
+			    {
+				    RaycastHit hit;
+				    Ray ray = camera.ScreenPointToRay(Input.mousePosition);
 				
-				if (Physics.Raycast(ray, out hit))
-				{
-					if (hit.transform.gameObject.tag == "RowTrigger")
-					{
-						//Debug.Log("I have triggered " + hit.transform.name);
-						if(board[hit.transform.gameObject.GetComponent<rowNumber>().rowNum, 0].value == 0){
-							//Debug.Log ("Made a piece");
-							AddPiece(hit.transform.gameObject.GetComponent<rowNumber>().rowNum, playerOne);
-							switchPlayers();
-						}
-					}
-				}
-			}
-			else if (Input.GetKeyDown(KeyCode.R))
-			{
-				Rotate (true);
-				switchPlayers();
-			}
-			else if (Input.GetKeyDown(KeyCode.T))
-			{
-				Rotate (false);
-				switchPlayers();
-			}
-			break;
-		}
-		case GameState.animation:
-		{
-            if (boardQuad.GetComponent<boardRotate>().RotationInterval == 0)
-            {
-                gameState = GameState.playerInput;
-            }
-            //boardQuad.transform.Rotate(new Vector3(0f, 0f, 0.4f));
-            boardQuad.GetComponent<boardRotate>().rotate();
-            for (int i = 0; i < 6; i++)
-            {
-                for (int j = 0; j < 6; j++)
+				    if (Physics.Raycast(ray, out hit))
+				    {
+					    if (hit.transform.gameObject.tag == "RowTrigger")
+					    {
+                            Debug.Log("I have triggered " + hit.transform.gameObject.GetComponent<rowNumber>().rowNum);
+						    //if(board[hit.transform.gameObject.GetComponent<rowNumber>().rowNum, 0].value == 0){
+							    //Debug.Log ("Made a piece");
+							    AddPiece(hit.transform.gameObject.GetComponent<rowNumber>().rowNum, playerOne);
+							    //switchPlayers();
+						    //}
+					    }
+				    }
+			    }
+			    else if (Input.GetKeyDown(KeyCode.R))
+			    {
+				    Rotate (true);
+				    switchPlayers();
+			    }
+			    else if (Input.GetKeyDown(KeyCode.T))
+			    {
+				    Rotate (false);
+				    switchPlayers();
+			    }
+			    break;
+		    case GameState.animation:
+                if (boardQuad.GetComponent<boardRotate>().RotationInterval == 0)
                 {
-                    board[i, j].GetComponent<piece>().moveAnimation();
+                    gameState = GameState.playerInput;
                 }
-            }
-			break;
-		}
-		case GameState.end:
-		{
-
-			break;
-		}
-		default:
-			break;
+                //boardQuad.transform.Rotate(new Vector3(0f, 0f, 0.4f));
+                boardQuad.GetComponent<boardRotate>().rotate();
+                for (int i = 0; i < 6; i++)
+                {
+                    for (int j = 0; j < 6; j++)
+                    {
+                        board[i, j].GetComponent<piece>().moveAnimation();
+                    }
+                }
+			    break;
+		    case GameState.end:
+			    break;
+		    default:
+			    break;
 		}
         
 	}
     //Receive column and the player value
 	//Go to column and look at 
-	void AddPiece(int column, int player){
+	void AddPiece(int column, int player)
+    {
 		int i;
 
-		for (i = 0; i < board.GetLength(0); i++) {
-			if(board[column, i].value != 0){
-                break;
-			}
-		}
-
-		if (i == 0) 
+        if (boardState == 0)
         {
-			return;
-        }
-		switch(boardState){
-		case 0:
-			board[column, i - 1].value = player;
-			break;
-		case 1:
-			board[column, i - 1].value = player;
-			break;
-		case 2:
-			board[column, i - 1].value = player;
-			break;
-		case 3:
-			//board[board.GetLength (0) - i, column].value = player;
-			board[column, i - 1].value = player;
-			break;
+            for (i = 0; i < board.GetLength(0); i++)
+            {
+                if (board[column, i].value != 0)
+                {
+                    break;
+                }
+            }
 
-		default:
-			break;
-		}
-        board[column, i - 1].animationPos = new Vector3(
-                    origin.x + spacing.x * i,
-                    origin.z + spacing.z * column);
-        board[column, i - 1].targetPos = new Vector2(
-                board[column, i - 1].GetComponent<Transform>().position.x,
-                board[column, i - 1].GetComponent<Transform>().position.z
-            );
-        //Debug.Log(board[column, i - 1].animationPos);
+            if (i == 0)
+            {
+                return;
+            }
+            i--;
+        }
+        else if (boardState == 1)
+        {
+            column = board.GetLength(1) - column - 1;
+            for (i = 0; i < board.GetLength(0); i++)
+            {
+                if (board[i, column].value != 0)
+                {
+                    break;
+                }
+            }
+
+            if (i == 0)
+            {
+                return;
+            }
+
+            int temp = i;
+            i = column;
+            column = temp;
+            column--;
+        }
+        else if (boardState == 2)
+        {
+            column = board.GetLength(0) - column - 1;
+            for (i = board.GetLength(0) - 1; i >= 0; i--)
+            {
+                if (board[column, i].value != 0)
+                {
+                    break;
+                }
+            }
+
+            if (i == board.GetLength(0) - 1)
+            {
+                return;
+            }
+
+            i++;
+        }
+        else
+        {
+            for (i = board.GetLength(0)-1; i >=0; i--)
+            {
+                if (board[i, column].value != 0)
+                {
+                    break;
+                }
+            }
+
+            if (i == board.GetLength(0)-1)
+            {
+                return;
+            }
+
+            int temp = i;
+            i = column;
+            column = temp;
+            column++;
+        }
+        
+        board[column, i].value = player;
 
         int numWins = 0;
 
@@ -188,6 +225,7 @@ public class boardManager : MonoBehaviour {
         {
             //Debug.Log(player + " wins");
         }
+        switchPlayers();
 	}
 	//Rotate the board clockwise or counter-clockwise
 	public void Rotate(bool clockwise){
@@ -202,14 +240,14 @@ public class boardManager : MonoBehaviour {
 		//take piece and add it to corresponding row
 		//move up the column, and distribute them across
 		if (clockwise) {
-            //boardQuad.GetComponent<boardRotate>().RotationInterval = -3.0f;
+            boardQuad.GetComponent<boardRotate>().RotationInterval = -3.0f;
 			for (int i = temp.GetLength(0) - 1; i >=0; i--) {
 				for (int j = temp.GetLength(1) - 1; j >= 0; j--) {
 					//Debug.Log("row " + i);
 					//Debug.Log("column " + j);
 					//Debug.Log ("player " + temp [i, j].value);
                     //UNCOMMENT AFTER PLANNING ANIMATED ROTATION
-					board[temp.GetLength (1) - j - 1, i].value = temp [i, j].value;
+					//board[temp.GetLength (1) - j - 1, i].value = temp [i, j].value;
 				}
 			}
 			boardState++;
@@ -220,14 +258,14 @@ public class boardManager : MonoBehaviour {
 		//take piece and add it to corresponding row
 		//move up the column, and distribute them across
 		else {
-            //boardQuad.GetComponent<boardRotate>().RotationInterval = 3.0f;
+            boardQuad.GetComponent<boardRotate>().RotationInterval = 3.0f;
 			for (int i = 0; i < temp.GetLength(0); i++) {
 				for (int j = temp.GetLength(1) - 1; j >= 0; j--) {
 					//Debug.Log("row " + i);
 					//Debug.Log("column " + j);
 					//Debug.Log ("player " + temp [i, j].value);
                     //UNCOMMENT AFTER PLANNING ANIMATED ROTATION
-					board[j, i].value = temp [i, j].value;
+					//board[j, i].value = temp [i, j].value;
 				}
 			}
 			boardState--;
@@ -316,14 +354,45 @@ public class boardManager : MonoBehaviour {
         return 0;
     }
 	//Resets the the piece that is below each piece
-	void UpdateBelow()
+	void UpdatePieceLinks()
 	{
 		for (int i = 0; i < board.GetLength(0); i++) {
 			for (int j = 0; j < board.GetLength(1); j++){
-				if(j < board.GetLength(1) - 1)
-					board[i, j].SetBelow(board[i, j + 1]);
-				else
-					board[i, j].SetBelow(null);
+                if (j < board.GetLength(1) - 1)
+                {
+                    board[i, j].SetBelow(board[i, j + 1]);
+                }
+                else
+                {
+                    board[i, j].SetBelow(null);
+                }
+
+                if (i < board.GetLength(0) - 1)
+                {
+                    board[i, j].SetRight(board[i + 1, j]);
+                }
+                else
+                {
+                    board[i, j].SetRight(null);
+                }
+
+                if (i > 0)
+                {
+                    board[i, j].SetLeft(board[i - 1, j]);
+                }
+                else
+                {
+                    board[i, j].SetLeft(null);
+                }
+
+                if (j > 0)
+                {
+                    board[i, j].SetTop(board[i, j - 1]);
+                }
+                else
+                {
+                    board[i, j].SetTop(null);
+                }
 			}
 		}
 	}
@@ -332,11 +401,41 @@ public class boardManager : MonoBehaviour {
 	{
 		for (int i = board.GetLength(0) - 1; i >=0; i--) {
 			for (int j = board.GetLength(1) - 1; j >= 0; j--) {
-				if (board [i, j].GetBelow != null && board [i, j].GetBelow.value == 0) {
-					board[i, j].GetBelow.value = board[i, j].value;
-					board[i, j].value = 0;
-				}
+                if (boardState == 0 && board[i, j].GetBelow != null && board[i, j].GetBelow.value == 0)
+                {
+                    board[i, j].GetBelow.value = board[i, j].value;
+                    board[i, j].value = 0;
+                }
+                else if (boardState == 1 && board[i, j].GetRight != null && board[i, j].GetRight.value == 0)
+                {
+                    board[i, j].GetRight.value = board[i, j].value;
+                    board[i, j].value = 0;
+                }
+                else if (boardState == 2 && board[i, j].GetTop != null && board[i, j].GetTop.value == 0)
+                {
+                    board[i, j].GetTop.value = board[i, j].value;
+                    board[i, j].value = 0;
+                }
+                else if (boardState == 3 && board[i, j].GetLeft != null && board[i, j].GetLeft.value == 0)
+                {
+                    board[i, j].GetLeft.value = board[i, j].value;
+                    board[i, j].value = 0;
+                }
 			}
 		}
 	}
+
+    void printBoard()
+    {
+        for (int i = 0; i < board.GetLength(0); i++)
+        {
+            for (int j = 0; j < board.GetLength(1); j++)
+            {
+                if (board[i, j].value != 0)
+                {
+                    Debug.Log("Player " +board[i,j].value+" location["+i+"+"+j+"]");
+                }
+            }
+        }
+    }
 }

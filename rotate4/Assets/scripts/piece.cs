@@ -16,11 +16,17 @@ public class piece : MonoBehaviour {
 	public Vector2 targetPos;
 	public Vector2 animationPos;
 	private piece below;
+    private piece left;
+    private piece right;
+    private piece top;
 
 	// Use this for initialization
 	void Start () {
         value = 0;
 		below = null;
+        left = null;
+        right = null;
+        top = null;
 	}   
 	
 	// Update is called once per frame
@@ -48,9 +54,40 @@ public class piece : MonoBehaviour {
 	{
 		get {return below;}
 	}
+
 	public void SetBelow(piece value) {
 		below = value;
 	}
+
+    public piece GetLeft
+    {
+        get { return left; }
+    }
+
+    public void SetLeft(piece value)
+    {
+        left = value;
+    }
+
+    public piece GetRight
+    {
+        get { return right; }
+    }
+
+    public void SetRight(piece value)
+    {
+        right = value;
+    }
+
+    public piece GetTop
+    {
+        get { return top; }
+    }
+
+    public void SetTop(piece value)
+    {
+        top = value;
+    }
 
     public void moveAnimation()
     {
