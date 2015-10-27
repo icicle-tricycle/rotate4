@@ -41,7 +41,7 @@ public class boardRotate : MonoBehaviour {
     {
         currentAngle += rotationInterval;
         //Debug.Log(transform.eulerAngles.y);
-        Debug.Log("rotation interval: " + rotationInterval + "| cw angle case: " + (currentAngle < targetAngle) + "| ccw angle case: " + (currentAngle > targetAngle));
+        //Debug.Log("rotation interval: " + rotationInterval + "| cw angle case: " + (currentAngle < targetAngle) + "| ccw angle case: " + (currentAngle > targetAngle));
         //Debug.Log("cw angle case: " + (currentAngle < targetAngle));
         //Debug.Log("ccw angle case: " + (currentAngle > targetAngle));
         if(

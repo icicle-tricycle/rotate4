@@ -24,6 +24,7 @@ public class boardManager : MonoBehaviour {
 	public int playerOne;
 
 	public int boardState;
+    public int framesSinceRotate = 7;
 
 	public enum GameState
 	{
@@ -84,10 +85,10 @@ public class boardManager : MonoBehaviour {
 				    {
 					    if (hit.transform.gameObject.tag == "RowTrigger")
 					    {
-                            Debug.Log("I have triggered " + hit.transform.gameObject.GetComponent<rowNumber>().rowNum);
+                            //Debug.Log("I have triggered " + hit.transform.gameObject.GetComponent<rowNumber>().rowNum);
 						    //if(board[hit.transform.gameObject.GetComponent<rowNumber>().rowNum, 0].value == 0){
 							    //Debug.Log ("Made a piece");
-							    AddPiece(hit.transform.gameObject.GetComponent<rowNumber>().rowNum, playerOne);
+							    AddPiece(hit.transform.gameObject.GetComponent<rowNumber>().rowNum, playerOne, board);
 							    //switchPlayers();
 						    //}
 					    }
@@ -103,6 +104,8 @@ public class boardManager : MonoBehaviour {
 				    Rotate (false);
 				    switchPlayers();
 			    }
+
+                framesSinceRotate++;
 			    break;
 		    case GameState.animation:
                 if (boardQuad.GetComponent<boardRotate>().RotationInterval == 0)
@@ -124,19 +127,64 @@ public class boardManager : MonoBehaviour {
 		    default:
 			    break;
 		}
+
+        int numWins = 0;
+        int player1Wins = 0;
+        int player2Wins = 0;
+
+        if (framesSinceRotate == board.GetLength(0)+2)
+        {
+            for (int i = 0; i < board.GetLength(0); i++)
+            {
+                for (int j = 0; j < board.GetLength(1); j++)
+                {
+                    if (board[i, j].value != 0)
+                    {
+                        numWins += checkWin(board[i, j].value, 0, i, j, new Vector2(1, -1), board);
+                        numWins += checkWin(board[i, j].value, 0, i, j, new Vector2(1, 0), board);
+                        numWins += checkWin(board[i, j].value, 0, i, j, new Vector2(1, 1), board);
+                        numWins += checkWin(board[i, j].value, 0, i, j, new Vector2(0, -1), board);
+                        numWins += checkWin(board[i, j].value, 0, i, j, new Vector2(0, 1), board);
+                        numWins += checkWin(board[i, j].value, 0, i, j, new Vector2(-1, -1), board);
+                        numWins += checkWin(board[i, j].value, 0, i, j, new Vector2(-1, 0), board);
+                        numWins += checkWin(board[i, j].value, 0, i, j, new Vector2(-1, 1), board);
+
+                        if (board[i, j].value == 1)
+                        {
+                            player1Wins = numWins;
+                        }
+                        else
+                        {
+                            player2Wins = numWins;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (player1Wins > 0)
+        {
+            Debug.Log("Player 1 won " + player1Wins/2 + " times");
+        }
+        if (player2Wins > 0)
+        {
+            Debug.Log("Player 2 won " + player2Wins/2 + " times");
+        }
+
+        
         
 	}
     //Receive column and the player value
 	//Go to column and look at 
-	void AddPiece(int column, int player)
+	void AddPiece(int column, int player, piece[,] tempBoard)
     {
 		int i;
 
         if (boardState == 0)
         {
-            for (i = 0; i < board.GetLength(0); i++)
+            for (i = 0; i < tempBoard.GetLength(0); i++)
             {
-                if (board[column, i].value != 0)
+                if (tempBoard[column, i].value != 0)
                 {
                     break;
                 }
@@ -150,10 +198,10 @@ public class boardManager : MonoBehaviour {
         }
         else if (boardState == 1)
         {
-            column = board.GetLength(1) - column - 1;
-            for (i = 0; i < board.GetLength(0); i++)
+            column = tempBoard.GetLength(1) - column - 1;
+            for (i = 0; i < tempBoard.GetLength(0); i++)
             {
-                if (board[i, column].value != 0)
+                if (tempBoard[i, column].value != 0)
                 {
                     break;
                 }
@@ -171,16 +219,16 @@ public class boardManager : MonoBehaviour {
         }
         else if (boardState == 2)
         {
-            column = board.GetLength(0) - column - 1;
-            for (i = board.GetLength(0) - 1; i >= 0; i--)
+            column = tempBoard.GetLength(0) - column - 1;
+            for (i = tempBoard.GetLength(0) - 1; i >= 0; i--)
             {
-                if (board[column, i].value != 0)
+                if (tempBoard[column, i].value != 0)
                 {
                     break;
                 }
             }
 
-            if (i == board.GetLength(0) - 1)
+            if (i == tempBoard.GetLength(0) - 1)
             {
                 return;
             }
@@ -189,15 +237,15 @@ public class boardManager : MonoBehaviour {
         }
         else
         {
-            for (i = board.GetLength(0)-1; i >=0; i--)
+            for (i = tempBoard.GetLength(0) - 1; i >= 0; i--)
             {
-                if (board[i, column].value != 0)
+                if (tempBoard[i, column].value != 0)
                 {
                     break;
                 }
             }
 
-            if (i == board.GetLength(0)-1)
+            if (i == tempBoard.GetLength(0) - 1)
             {
                 return;
             }
@@ -207,23 +255,24 @@ public class boardManager : MonoBehaviour {
             column = temp;
             column++;
         }
-        
-        board[column, i].value = player;
+
+        tempBoard[column, i].value = player;
 
         int numWins = 0;
 
-        numWins += checkWin(player, 0, column, i - 1, new Vector2(1, -1));
-        numWins += checkWin(player, 0, column, i - 1, new Vector2(1, 0));
-        numWins += checkWin(player, 0, column, i - 1, new Vector2(1, 1));
-        numWins += checkWin(player, 0, column, i - 1, new Vector2(0, -1));
-        numWins += checkWin(player, 0, column, i - 1, new Vector2(0, 1));
-        numWins += checkWin(player, 0, column, i - 1, new Vector2(-1, -1));
-        numWins += checkWin(player, 0, column, i - 1, new Vector2(-1, 0));
-        numWins += checkWin(player, 0, column, i - 1, new Vector2(-1, 1));
+        numWins += checkWin(player, 0, column, i, new Vector2(1, -1), tempBoard);
+        numWins += checkWin(player, 0, column, i, new Vector2(1, 0), tempBoard);
+        numWins += checkWin(player, 0, column, i, new Vector2(1, 1), tempBoard);
+        numWins += checkWin(player, 0, column, i, new Vector2(0, -1), tempBoard);
+        numWins += checkWin(player, 0, column, i, new Vector2(0, 1), tempBoard);
+        numWins += checkWin(player, 0, column, i, new Vector2(-1, -1), tempBoard);
+        numWins += checkWin(player, 0, column, i, new Vector2(-1, 0), tempBoard);
+        numWins += checkWin(player, 0, column, i, new Vector2(-1, 1), tempBoard);
 
+        //Debug.Log("Check for wins");
         if (numWins > 0)
         {
-            //Debug.Log(player + " wins");
+            Debug.Log(player + " wins");
         }
         switchPlayers();
 	}
@@ -233,46 +282,20 @@ public class boardManager : MonoBehaviour {
 
         piece[,] temp;
         temp = copyBoard();
-        //UNCOMMENT AFTER PLANNING ANIMATED ROTATION
-        //resetBoard();
         
-		//Start at lower right corner
-		//take piece and add it to corresponding row
-		//move up the column, and distribute them across
 		if (clockwise) {
             boardQuad.GetComponent<boardRotate>().RotationInterval = -3.0f;
-			for (int i = temp.GetLength(0) - 1; i >=0; i--) {
-				for (int j = temp.GetLength(1) - 1; j >= 0; j--) {
-					//Debug.Log("row " + i);
-					//Debug.Log("column " + j);
-					//Debug.Log ("player " + temp [i, j].value);
-                    //UNCOMMENT AFTER PLANNING ANIMATED ROTATION
-					//board[temp.GetLength (1) - j - 1, i].value = temp [i, j].value;
-				}
-			}
 			boardState++;
 			if(boardState > 3)
 				boardState = 0;
 		}
-		//Start at lower left corner
-		//take piece and add it to corresponding row
-		//move up the column, and distribute them across
 		else {
             boardQuad.GetComponent<boardRotate>().RotationInterval = 3.0f;
-			for (int i = 0; i < temp.GetLength(0); i++) {
-				for (int j = temp.GetLength(1) - 1; j >= 0; j--) {
-					//Debug.Log("row " + i);
-					//Debug.Log("column " + j);
-					//Debug.Log ("player " + temp [i, j].value);
-                    //UNCOMMENT AFTER PLANNING ANIMATED ROTATION
-					//board[j, i].value = temp [i, j].value;
-				}
-			}
 			boardState--;
 			if(boardState < 0)
 				boardState = 3;
 		}
-        
+        framesSinceRotate = 0;
     }
     /// <summary>
     /// Changes player variable and alpha of turn indicator canvases
@@ -330,7 +353,7 @@ public class boardManager : MonoBehaviour {
     /// <param name="col">the vertical line to check</param>
     /// <param name="direction">a vec2 of where to check the next piece in the winning row</param>
     /// <returns></returns>
-    int checkWin(int winValue, int winStreak, int row, int col, Vector2 direction)
+    int checkWin(int winValue, int winStreak, int row, int col, Vector2 direction, piece[,] tempBoard)
     {
         //Debug.Log(winStreak);
         if (winStreak == 4)
@@ -342,10 +365,10 @@ public class boardManager : MonoBehaviour {
             return 0;
         }
 
-        if (!board[row,col].visited && winValue == board[row, col].value)
+        if (!board[row, col].visited && winValue == board[row, col].value)
         {
             board[row, col].visited = true;
-            int returnValue = checkWin(winValue, winStreak+1, row + (int)direction.x, col + (int)direction.y, direction);
+            int returnValue = checkWin(winValue, winStreak + 1, row + (int)direction.x, col + (int)direction.y, direction, board);
             board[row, col].visited = false;
 
             return returnValue;
