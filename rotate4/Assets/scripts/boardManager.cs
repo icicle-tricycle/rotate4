@@ -36,6 +36,8 @@ public class boardManager : MonoBehaviour {
     private GameObject whiteCanvas;
     private GameObject blackCanvas;
 	private GameObject boardQuad;
+	private GameObject blackWinsCanvas;
+	private GameObject whiteWinsCanvas;
     
 	// Use this for initialization
 	void Start () {
@@ -43,6 +45,7 @@ public class boardManager : MonoBehaviour {
         whiteCanvas = GameObject.Find("CanvasWhite");
         blackCanvas = GameObject.Find("CanvasBlack");
         boardQuad = GameObject.Find("Board");
+		blackWinsCanvas = GameObject.Find ("BlackWins");
         gameState = GameState.playerInput;
 		boardState = 0;
 
@@ -438,4 +441,8 @@ public class boardManager : MonoBehaviour {
             }
         }
     }
+	void gameEnd()
+	{
+
+	}
 }
