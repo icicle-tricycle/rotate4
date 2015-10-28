@@ -22,9 +22,9 @@ public class boardManager : MonoBehaviour {
 	/// Var for if it is player one's turn
 	/// </summary>
 	public int playerOne;
-
 	public int boardState;
     public int framesSinceRotate = 7;
+	public int winner = 0;
 
 	public enum GameState
 	{
@@ -39,6 +39,7 @@ public class boardManager : MonoBehaviour {
 	private GameObject boardQuad;
 	private GameObject blackWinsCanvas;
 	private GameObject whiteWinsCanvas;
+	private GameObject tieCanvas;
     
 	// Use this for initialization
 	void Start () {
@@ -47,6 +48,11 @@ public class boardManager : MonoBehaviour {
         blackCanvas = GameObject.Find("CanvasBlack");
         boardQuad = GameObject.Find("Board");
 		blackWinsCanvas = GameObject.Find ("BlackWins");
+		whiteWinsCanvas = GameObject.Find ("WhiteWins");
+		tieCanvas = GameObject.Find ("Tie");
+		blackWinsCanvas.SetActive (false);
+		whiteWinsCanvas.SetActive (false);
+		tieCanvas.SetActive (false);
         gameState = GameState.playerInput;
 		boardState = 0;
 
@@ -108,6 +114,46 @@ public class boardManager : MonoBehaviour {
 				    switchPlayers();
 			    }
 
+				int numWins = 0;
+				int player1Wins = 0;
+				int player2Wins = 0;
+				
+				if (framesSinceRotate == board.GetLength(0)+2)
+				{
+					for (int i = 0; i < board.GetLength(0); i++)
+					{
+						for (int j = 0; j < board.GetLength(1); j++)
+						{
+							numWins = 0;
+							if (board[i, j].value != 0)
+							{
+								numWins += checkWin(board[i, j].value, 0, i, j, new Vector2(1, -1), board);
+								numWins += checkWin(board[i, j].value, 0, i, j, new Vector2(1, 0), board);
+								numWins += checkWin(board[i, j].value, 0, i, j, new Vector2(1, 1), board);
+								numWins += checkWin(board[i, j].value, 0, i, j, new Vector2(0, -1), board);
+								numWins += checkWin(board[i, j].value, 0, i, j, new Vector2(0, 1), board);
+								numWins += checkWin(board[i, j].value, 0, i, j, new Vector2(-1, -1), board);
+								numWins += checkWin(board[i, j].value, 0, i, j, new Vector2(-1, 0), board);
+								numWins += checkWin(board[i, j].value, 0, i, j, new Vector2(-1, 1), board);
+								
+								if (board[i, j].value == 1)
+								{
+									player1Wins += numWins;
+								}
+								else
+								{
+									player2Wins += numWins;
+								}
+							}
+						}
+					}
+				}
+			
+				if (player1Wins != 0 || player2Wins != 0) 
+				{
+					gameEnd (player1Wins/2, player2Wins/2);
+				}
+
                 framesSinceRotate++;
 			    break;
 		    case GameState.animation:
@@ -126,53 +172,17 @@ public class boardManager : MonoBehaviour {
                 }
 			    break;
 		    case GameState.end:
+				if(winner == 1){
+				whiteWinsCanvas.SetActive(true);
+			}else if(winner == 2){
+				blackWinsCanvas.SetActive(true);
+			}else if(winner == 3){
+				tieCanvas.SetActive(true);
+			}
 			    break;
 		    default:
 			    break;
 		}
-
-        int numWins = 0;
-        int player1Wins = 0;
-        int player2Wins = 0;
-
-        if (framesSinceRotate == board.GetLength(0)+2)
-        {
-            for (int i = 0; i < board.GetLength(0); i++)
-            {
-                for (int j = 0; j < board.GetLength(1); j++)
-                {
-                    if (board[i, j].value != 0)
-                    {
-                        numWins += checkWin(board[i, j].value, 0, i, j, new Vector2(1, -1), board);
-                        numWins += checkWin(board[i, j].value, 0, i, j, new Vector2(1, 0), board);
-                        numWins += checkWin(board[i, j].value, 0, i, j, new Vector2(1, 1), board);
-                        numWins += checkWin(board[i, j].value, 0, i, j, new Vector2(0, -1), board);
-                        numWins += checkWin(board[i, j].value, 0, i, j, new Vector2(0, 1), board);
-                        numWins += checkWin(board[i, j].value, 0, i, j, new Vector2(-1, -1), board);
-                        numWins += checkWin(board[i, j].value, 0, i, j, new Vector2(-1, 0), board);
-                        numWins += checkWin(board[i, j].value, 0, i, j, new Vector2(-1, 1), board);
-
-                        if (board[i, j].value == 1)
-                        {
-                            player1Wins = numWins;
-                        }
-                        else
-                        {
-                            player2Wins = numWins;
-                        }
-                    }
-                }
-            }
-        }
-
-        if (player1Wins > 0)
-        {
-            Debug.Log("Player 1 won " + player1Wins/2 + " times");
-        }
-        if (player2Wins > 0)
-        {
-            Debug.Log("Player 2 won " + player2Wins/2 + " times");
-        }
 
         
         
@@ -276,6 +286,13 @@ public class boardManager : MonoBehaviour {
         if (numWins > 0)
         {
             Debug.Log(player + " wins");
+			if(player == 1)
+			{
+				gameEnd(1, 0);
+			}
+			else{
+				gameEnd(0, 1);
+			}
         }
         switchPlayers();
 	}
@@ -464,8 +481,18 @@ public class boardManager : MonoBehaviour {
             }
         }
     }
-	void gameEnd()
+	void gameEnd(int whiteWins, int blackWins)
 	{
-
+		Debug.Log ("White wins: " + whiteWins + ", Black wins: " + blackWins);
+		if (whiteWins > blackWins) {
+			winner = 1;
+			gameState = GameState.end;
+		} else if (blackWins > whiteWins) {
+			winner = 2;
+			gameState = GameState.end;
+		} else {
+			winner = 3;
+			gameState = GameState.end;
+		}
 	}
 }
