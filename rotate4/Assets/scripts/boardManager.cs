@@ -16,6 +16,7 @@ public class boardManager : MonoBehaviour {
     Vector3 boardOrigin;
     Vector3 screenSpacing;
     public Camera camera;
+	//private float timer = 0;
 
     public piece boardPiece;
 	/// <summary>
@@ -83,7 +84,13 @@ public class boardManager : MonoBehaviour {
         {
 		    case GameState.playerInput:
 			    UpdatePieceLinks();
-			    Fall ();
+			/*timer += Time.deltaTime;
+			//Debug.Log (timer);
+			if(timer > .3){
+				framesSinceRotate++;*/
+				Fall ();
+				/*timer = 0;
+			}*/
                 //printBoard();
 			    if (Input.GetButtonDown("Fire1"))// && IsOnBoard())
 			    {
@@ -118,7 +125,7 @@ public class boardManager : MonoBehaviour {
 				int player1Wins = 0;
 				int player2Wins = 0;
 				
-				if (framesSinceRotate == board.GetLength(0)+2)
+				if (/*(timer > .3) &&*/ (framesSinceRotate == board.GetLength(0)+2))
 				{
 					for (int i = 0; i < board.GetLength(0); i++)
 					{
@@ -153,7 +160,7 @@ public class boardManager : MonoBehaviour {
 				{
 					gameEnd (player1Wins/2, player2Wins/2);
 				}
-
+				//comment this out during timer implementation
                 framesSinceRotate++;
 			    break;
 		    case GameState.animation:

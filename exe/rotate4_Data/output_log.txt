@@ -1,0 +1,41 @@
+Initialize engine version: 5.1.2f1 (afd2369b692a)
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.0]
+    Renderer: NVIDIA GeForce GTX 680 (ID=0x1180)
+    Vendor:   NVIDIA
+    VRAM:     1989 MB
+Begin MonoManager ReloadAssembly
+Platform assembly: D:\Rotate4\exe\rotate4_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading D:\Rotate4\exe\rotate4_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: D:\Rotate4\exe\rotate4_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading D:\Rotate4\exe\rotate4_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: D:\Rotate4\exe\rotate4_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading D:\Rotate4\exe\rotate4_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: D:\Rotate4\exe\rotate4_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
+Loading D:\Rotate4\exe\rotate4_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
+Platform assembly: D:\Rotate4\exe\rotate4_Data\Managed\UnityEngine.Analytics.dll (this message is harmless)
+Loading D:\Rotate4\exe\rotate4_Data\Managed\UnityEngine.Analytics.dll into Unity Child Domain
+- Completed reload, in  0.042 seconds
+desktop: 1920x1080 60Hz; virtual: 3840x1080 at 0,0
+<RI> Initializing input.
+<RI> Input initialized.
+<RI> Initialized touch support.
+Platform assembly: D:\Rotate4\exe\rotate4_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: D:\Rotate4\exe\rotate4_Data\Managed\System.dll (this message is harmless)
+Setting up 1 worker threads for Enlighten.
+  Thread -> id: 1f38 -> priority: 1 
+Unloading 3 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 3.518859 ms
+
+Unloading 4 unused Assets to reduce memory usage. Loaded Objects now: 315.
+Total: 0.279324 ms (FindLiveObjects: 0.022471 ms CreateObjectMapping: 0.017919 ms MarkObjects: 0.229262 ms  DeleteObjects: 0.008533 ms)
+
+rotation interval changed, start angle: 0 target: -90 rot interval: -3
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 65)
+
+White wins: 1, Black wins: 1
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/UnityEngineDebugBindings.gen.cpp Line: 65)
+
